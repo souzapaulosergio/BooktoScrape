@@ -30,7 +30,7 @@ SQLite - Base de dados
 
 1. Instalação: Clone o repositório:
 
-    git@github.com:souzapaulosergio/techchallenge.git
+    git@github.com:souzapaulosergio/BooktoScrape.git
 
 2. Criação do ambiente virtual
     python -m venv venv
