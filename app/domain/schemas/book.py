@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, condecimal
-from typing import Optional
+from typing import Dict
 from datetime import datetime
 
 class BookBase(BaseModel):
@@ -20,3 +20,8 @@ class BookResponse(BookBase):
 
     class Config:
         from_attributes = True
+
+class OverviewResponse(BaseModel):
+    total_livros: int
+    preco_medio: float
+    distribuicao_ratings: Dict[int, int]
