@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, condecimal
-from typing import Dict
+from pydantic import BaseModel, Field
+from typing import Dict, List
 from datetime import datetime
 
 class BookBase(BaseModel):
@@ -25,3 +25,14 @@ class OverviewResponse(BaseModel):
     total_livros: int
     preco_medio: float
     distribuicao_ratings: Dict[int, int]
+
+class CategoryResponse(BaseModel):
+    category: str
+
+class CategoryInfo(BaseModel):
+    total: int
+    prices: List[float]
+
+class StatCategoryResponse(BaseModel):
+    total: int
+    category: Dict[str, CategoryInfo]

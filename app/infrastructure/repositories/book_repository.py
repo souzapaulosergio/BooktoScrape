@@ -22,7 +22,7 @@ class BookRepository:
         return self.db.query(Book).filter(Book.id == book_id).first()
 
     def get_by_category(self) -> List[Book]:
-        return self.db.query(Book).distinct().all()
+        return self.db.query(Book.categoria).distinct().all()
     
     def get_books(self, titulo: Optional[str] = None, categoria: Optional[str] = None) -> List[Book]:
         query = self.db.query(Book)
@@ -32,6 +32,13 @@ class BookRepository:
         if categoria:
             query = query.filter(Book.categoria.ilike(f"%{categoria}%"))
         return query.all()
+    
+    def get_price_range(self,min: float, max = float ) -> List[Book]:
+        return (
+            self.db.query(Book)
+            .filter(Book.preco >= min, Book.preco <= max)
+            .all()
+        )
     
     def get_overview(self) -> List[Book]:
         total = self.db.query(func.count(Book.id)).scalar()
@@ -48,4 +55,42 @@ class BookRepository:
             "preco_medio": float(preco_medio) if preco_medio else 0,
             "distribuicao_ratings": distribuicao_ratings
         }
+    
+    def get_stats_category(self) -> dict:
+        total = self.db.query(func.count(Book.id)).scalar()
+        
+        # Consulta todos os livros agrupados por categoria
+        books_by_category = (
+            self.db.query(Book.categoria, Book.preco)
+            .all()
+        )
 
+        category_dict = {}
+        for cat, price in books_by_category:
+            if cat not in category_dict:
+                category_dict[cat] = {"total": 0, "prices": []}
+            category_dict[cat]["total"] += 1
+            category_dict[cat]["prices"].append(price)
+
+        return {"total": total, "category": category_dict}
+    
+  
+    def get_top_rated(self) -> List[Book]:
+        max_rating = self.db.query(func.max(Book.rating)).scalar()
+        book = (
+                self.db.query(Book)
+                .filter(Book.rating == max_rating)
+                .all()
+                )
+        return [
+             {
+                "id": b.id,
+                "categoria": b.categoria,
+                "titulo": b.titulo,
+                "moeda": b.moeda,
+                "preco": b.preco,
+                "estoque": b.estoque,
+                "rating": b.rating
+            } for b in book
+        ]
+ 

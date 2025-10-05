@@ -1,7 +1,7 @@
 from typing import List, Optional
 from fastapi import HTTPException, status
 from app.infrastructure.repositories.book_repository import BookRepository
-from app.domain.schemas.book import BookResponse, BookCreate, OverviewResponse
+from app.domain.schemas.book import BookResponse, BookCreate, OverviewResponse,CategoryResponse, StatCategoryResponse
 from app.domain.entities.books import Book
 import requests
 from bs4 import BeautifulSoup
@@ -17,15 +17,25 @@ class BookService:
         books = self.repository.get_all()
         return [BookResponse.model_validate(book) for book in books]
     
-    def get_category(self) -> List[BookResponse]:
+    def get_category(self) -> List[CategoryResponse]:
           db_book = self.repository.get_by_category()
+          # Converte para lista de Pydantic
+          categories = [CategoryResponse(category=book[0]) for book in db_book]
+          return categories
+    
+    def get_stats_category(self) -> StatCategoryResponse:
+          db_book = self.repository.get_stats_category()
           if not db_book:
                raise HTTPException(
                     status_code = status.HTTP_404_NOT_FOUND,
                     detail="Livro não encontrado"
                )
-          return [BookResponse.model_validate(book) for book in db_book]
+          return StatCategoryResponse(**db_book)
     
+    def get_price_range(self, min: float, max: float) -> List[BookResponse]:
+         db_book = self.repository.get_price_range(min=min, max= max)
+         return [BookResponse.model_validate(book) for book in db_book]  
+
     def get_book_search(self, titulo: Optional[str] = None, categoria: Optional[str] = None) -> List[BookResponse]:
         books = self.repository.get_books(titulo=titulo, categoria=categoria)
         return [BookResponse.model_validate(book) for book in books]
@@ -37,7 +47,12 @@ class BookService:
                     status_code = status.HTTP_404_NOT_FOUND,
                     detail="Livro não encontrado"
                )
-         return OverviewResponse(**db_book)
+         return OverviewResponse(**db_book) 
+
+    
+    def get_top_rated(self) -> List[BookResponse]:
+         db_book = self.repository.get_top_rated()
+         return [BookResponse.model_validate(book) for book in db_book]
     
     def get_book(self, book_id: int) -> BookResponse:
          db_book = self.repository.get_by_id(book_id)

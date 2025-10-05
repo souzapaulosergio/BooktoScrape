@@ -13,10 +13,10 @@ app = FastAPI(
     description="API para gerenciamento de livros, incluindo listagem, busca e ranking."
 )
 
-app.include_router(book_routes.router, prefix="/api/v1")
-app.include_router(book_routes.router_scrape, prefix="/api/v1")
-app.include_router(book_routes.router_stats, prefix="/api/v1")
+app.include_router(book_routes.router, prefix="/api/v1")            
 app.include_router(book_routes.routes_categoreis, prefix="/api/v1")
+app.include_router(book_routes.router_stats, prefix="/api/v1")
+app.include_router(book_routes.router_scrape, prefix="/api/v1")
 
 @app.on_event("startup")
 async def startuo_event():
@@ -39,3 +39,6 @@ async def health():
             "status": "healthy"
         }
     )
+
+for route in app.routes:
+    print(route.path)
