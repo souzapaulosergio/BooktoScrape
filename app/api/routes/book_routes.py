@@ -102,7 +102,7 @@ def get_category(
        service: BookService = Depends(get_book_services)
     ):
     """
-        Lista Categorias disponiveis
+        Lista Categorias disponíveis
     """
     return service.get_category()
 
