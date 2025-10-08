@@ -5,13 +5,17 @@ from app.core.database import get_db
 from app.domain.schemas.book import BookResponse, OverviewResponse,CategoryResponse, StatCategoryResponse
 from app.application.services.book_service import BookService
 from app.infrastructure.repositories.book_repository import BookRepository
+from app.application.services.jwt_service import JWTService
 
 router = APIRouter(prefix="/books", tags=["Books"])
 routes_categoreis = APIRouter(tags=["Category"])
 router_stats = APIRouter(prefix = "/stats", tags=["Stats"])
 router_scrape = APIRouter(tags=["Scrape"])
 
+jwt_service = JWTService()
+
 def get_book_services(db: Session = Depends(get_db)):
+    """Injeção de dependencia, cria uma sessão de banco de dados e retorna"""
     repository = BookRepository(db)
     return BookService(repository)
 
@@ -20,10 +24,23 @@ def get_book_services(db: Session = Depends(get_db)):
 def get_all_books(
        service: BookService = Depends(get_book_services)
 ):
+    """
+        Obtem lita de Livros
+
+        Exemplo de chamada:
+        - /api/v1/books
+
+    """
     return service.get_all_book()
 
 @router.get("/top_rated", response_model= List[BookResponse])
 def get_top_rated(service: BookService = Depends(get_book_services)):
+    """
+    Seleciona os livros com maior rating
+
+    Exemplo de chamada:
+    - *** /api/v1/books/top_rated ***
+    """
     return service.get_top_rated()
 
 @router.get("/search",  response_model= List[BookResponse])
@@ -32,6 +49,16 @@ def search(
     titulo: Optional[str] = None,
     categoria: Optional[str] = None
 ):
+    """
+    Pesquisa livros por titulo e/ou categoria
+
+    exemplo de chamada:
+    - GET api/v1/books/search?titulo=Teste&categoria=travel
+
+    paramentros:
+    - Titulo
+    - Categoria
+    """
     return service.get_book_search(titulo=titulo, categoria = categoria)
 
 @router.get("/price-range", response_model= List[BookResponse])
@@ -40,6 +67,16 @@ def get_book_price_rage(
     max: float,
     service: BookService = Depends(get_book_services)    
  ):
+    """
+    Busca livros por range de preço
+    
+    Exemplo de Chamada:
+    - ***/api/v1/books/price-range?min=20&max=25***
+    
+    Parametros: Obrigatórios
+    - min: float
+    - max: float
+    """
     return service.get_price_range(min=min, max=max)
 
 @router.get("/{book_id}", response_model=BookResponse)
@@ -47,6 +84,15 @@ def get_book(
     book_id: int,
     service: BookService = Depends(get_book_services)
     ):
+    """
+    Busca de detalhes de livros
+
+    Parametro:
+    -    id: int
+
+    Exemplo chamada:
+    -    **/api/v1/books/1**
+    """
     return service.get_book(book_id)
 
 # # ### Rotas Categorias
@@ -55,6 +101,9 @@ def get_book(
 def get_category(
        service: BookService = Depends(get_book_services)
     ):
+    """
+        Lista Categorias disponiveis
+    """
     return service.get_category()
 
 # # ###Rotas Estatisticas
@@ -68,5 +117,8 @@ def get_stats_category(service: BookService = Depends(get_book_services)):
 
 # ###Rota Scraping
 @router_scrape.get("/bookscraping")
-def get_data_scrape(service: BookService = Depends(get_book_services)):
+def get_data_scrape(
+    service: BookService = Depends(get_book_services),
+    current_user: str = Depends(jwt_service.get_current_user) 
+                    ):
     return service.scraping()
