@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from app.core.database import init_db
-from app.core.logging_config import setup_logging
+# from app.core.logging_config import setup_logging
 from app.api.routes import book_routes
-from app.api.routes.auth_route import  router as auth_router
+# from app.api.routes.auth_route import  router as auth_router
 
 
 
-setup_logging()
+# setup_logging()
 
 app = FastAPI(
     title="Books API",
@@ -21,13 +21,13 @@ def startup_event():
     # E chamando a função com parênteses.
     init_db() 
     print("Database initialized successfully.")
-    
+
 
 app.include_router(book_routes.router, prefix="/api/v1")            
-app.include_router(book_routes.routes_categoreis, prefix="/api/v1")
-app.include_router(book_routes.router_stats, prefix="/api/v1")
-app.include_router(book_routes.router_scrape, prefix="/api/v1")
-app.include_router(auth_router, prefix="/api/v1/auth")
+# app.include_router(book_routes.routes_categoreis, prefix="/api/v1")
+# app.include_router(book_routes.router_stats, prefix="/api/v1")
+# app.include_router(book_routes.router_scrape, prefix="/api/v1")
+# app.include_router(auth_router, prefix="/api/v1/auth")
 
 @app.on_event("startup")
 async def startuo_event():
