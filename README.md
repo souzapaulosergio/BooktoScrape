@@ -1,5 +1,7 @@
 # techchallenge
-API de gerenciamento de Livros Books To Scraping, WebScraping, Monitoramento e Estatisticas
+API de gerenciamento de Livros fornece *endpoints* Restful para gerenciamento de livros, busca de livros por id, categoria, preço, maior avalição. 
+
+** URL Base ** '/api/v1/login'
 
 Estutura de pastas
 BooktoScrape/
@@ -8,12 +10,14 @@ BooktoScrape/
 |            |-v1/
 |               |route/
 |                   |- __init__.py
-|                   |- book_routes.py
+|                   |- auth_route.py
+|                   |- book_routes.py                   
 |            | __init__.py
 |        |- aplication/
 |            |- service/
 |               |- __init__.py
 |               |- book_service.py
+|               |- jwt_service.py
 |            |- __init__.py
 |        |-core/
 |            |- __init__.py
@@ -26,6 +30,7 @@ BooktoScrape/
 |               |- books.py
 |            |- schemas/
 |                |- __init__.py
+|                |- auth.py
 |                |- book.py
 |            |- __init__.py
 |        |-infrastructure/
@@ -64,7 +69,11 @@ SQLite - Base de dados
 
 
 4. EndPoints
+    Execução pelo Swagger (http://127.0.0.1:8000/docs)
+
+    
     ***API Web Scraping: efetua o scraping dados no Site Book to scraping e armazena na base de dados SQLite
+
         Obter token
             ***POST /api/v1/login***
             Headers
@@ -76,8 +85,10 @@ SQLite - Base de dados
             }
         response:
             {
-                "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6I..."
+                "access_token": "eyJhbGciOiJIUzI1iIsInR5cCI6I..."
             }
+
+        pegue o access token e inclua na area de Authorize e salve
 
         ***GET /api/v1/bookscraping*** API de Web Scraping -- Tabela sera carregada com dados do Site https://books.toscrape.com/
             Authorization: Bearer <token>
