@@ -43,6 +43,7 @@ BooktoScrape/
 |    |- README.md
 |    |- requirements.txt
 |    |- run.py
+|    |- vercel.json
 
 Api para gerenciar e consultar livros usando FAST API e sqlalchemy
 
