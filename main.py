@@ -5,14 +5,23 @@ from app.core.logging_config import setup_logging
 from app.api.routes import book_routes
 from app.api.routes.auth_route import  router as auth_router
 
+
+
 setup_logging()
-init_db()
 
 app = FastAPI(
     title="Books API",
     version="1.0.0",
     description="API para gerenciamento de livros, incluindo listagem, busca e ranking."
 )
+
+@app.on_event("startup")
+def startup_event():
+    # Corrigindo o erro de digitação: "startuo_event" -> "startup_event" (opcional)
+    # E chamando a função com parênteses.
+    init_db() 
+    print("Database initialized successfully.")
+    
 
 app.include_router(book_routes.router, prefix="/api/v1")            
 app.include_router(book_routes.routes_categoreis, prefix="/api/v1")
