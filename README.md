@@ -217,6 +217,4 @@ SQLite - Base de dados
     response:
         {
             "status": "healthy"
-        }
-
-    
+        }    
