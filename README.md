@@ -71,7 +71,6 @@ SQLite - Base de dados
 
 4. EndPoints
     Execução pelo Swagger (http://127.0.0.1:8000/docs)
-
     
     ***API Web Scraping: efetua o scraping dados no Site Book to scraping e armazena na base de dados SQLite
 
@@ -212,8 +211,7 @@ SQLite - Base de dados
             ]
             }
         }
-        }
-   
+        }   
 
     Request: ***GET /api/health***: verificar se a api esta conectando com a base de dados
     response:

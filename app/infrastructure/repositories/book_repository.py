@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from sqlalchemy import func
-from app.domain.entities.books import Book
+from app.domain.entities.books import Book, Users
 from app.domain.schemas.book import BookCreate
 
 class BookRepository:
@@ -17,6 +17,9 @@ class BookRepository:
 
     def get_all(self) -> List[Book]:
         return self.db.query(Book).all()
+    
+    def get_user(self, username: str) -> Optional[Users]:
+        return self.db.query(Users).filter(Users.username == username).first()
     
     def get_by_id(self, book_id: int) -> Optional[Book]:
         return self.db.query(Book).filter(Book.id == book_id).first()

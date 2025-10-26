@@ -13,3 +13,12 @@ class Book(Base):
     rating = Column(Integer, nullable=False)
     estoque = Column(String, nullable=False)
     created_at = Column(DateTime, default= datetime.utcnow)
+
+class Users(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
+    role = Column(String, nullable=False)
+    created_at = Column(DateTime, default= datetime.utcnow)
