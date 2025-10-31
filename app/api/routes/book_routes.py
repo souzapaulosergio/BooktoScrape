@@ -103,16 +103,69 @@ def get_category(
     ):
     """
         Lista Categorias disponíveis
+        exemplo de chamada:
+        - /api/v1/categories
+        -response:
+            [
+                {
+                    "category": "string"
+                }
+            ]
     """
     return service.get_category()
 
 # # ###Rotas Estatisticas
 @router_stats.get("/overview", response_model= OverviewResponse)
 def get_stats_overview(service: BookService = Depends(get_book_services)):
+    """
+        Obtem visão geral das estatisticas
+        exemplo de chamada:
+        - /api/v1/stats/overview
+
+        - response: 
+            {
+                "total_livros": 0,
+                "preco_medio": 0,
+                "distribuicao_ratings": {
+                    "additionalProp1": 0,
+                    "additionalProp2": 0,
+                    "additionalProp3": 0
+                }
+            }
+    """
     return service.get_overview()
 
 @router_stats.get("/categories", response_model= StatCategoryResponse)
 def get_stats_category(service: BookService = Depends(get_book_services)):
+    """
+        Obtem estatisticas por categoria
+        exemplo de chamada:
+        - /api/v1/stats/categories
+
+        - response:
+            {
+                "total": 0,
+                "category": {
+                    "additionalProp1": {
+                    "total": 0,
+                    "prices": [
+                        0
+                    ]
+                    },
+                    "additionalProp2": {
+                    "total": 0,
+                    "prices": [
+                        0
+                    ]
+                    },
+                    "additionalProp3": {
+                    "total": 0,
+                    "prices": [
+                        0
+                    ]
+                    }
+                }
+                }"""
     return service.get_stats_category()
 
 # ###Rota Scraping
@@ -121,4 +174,12 @@ def get_data_scrape(
     service: BookService = Depends(get_book_services),
     current_user: str = Depends(jwt_service.get_current_user) 
                     ):
+    """
+        Rota para iniciar o scraping de livros do site Books to Scrape
+
+        Exemplo de chamada:
+        - /api/v1/scrape/bookscraping
+
+        Requer autenticação com token JWT
+    """
     return service.scraping()
