@@ -28,8 +28,7 @@ def get_all_books(
         Obtem lita de Livros
 
         Exemplo de chamada:
-        - /api/v1/books
-
+            /api/v1/books
     """
     return service.get_all_book()
 
@@ -39,7 +38,7 @@ def get_top_rated(service: BookService = Depends(get_book_services)):
     Seleciona os livros com maior rating
 
     Exemplo de chamada:
-    - *** /api/v1/books/top_rated ***
+        *** /api/v1/books/top_rated ***
     """
     return service.get_top_rated()
 
@@ -52,12 +51,12 @@ def search(
     """
     Pesquisa livros por titulo e/ou categoria
 
-    exemplo de chamada:
-    - GET api/v1/books/search?titulo=Teste&categoria=travel
+    Exemplo de chamada:
+        GET api/v1/books/search?titulo=Teste&categoria=travel
 
     paramentros:
-    - Titulo
-    - Categoria
+        - Titulo
+        - Categoria
     """
     return service.get_book_search(titulo=titulo, categoria = categoria)
 
@@ -71,11 +70,11 @@ def get_book_price_rage(
     Busca livros por range de preço
     
     Exemplo de Chamada:
-    - ***/api/v1/books/price-range?min=20&max=25***
+        ***/api/v1/books/price-range?min=20&max=25***
     
     Parametros: Obrigatórios
-    - min: float
-    - max: float
+        - min: float
+        - max: float
     """
     return service.get_price_range(min=min, max=max)
 
@@ -88,10 +87,10 @@ def get_book(
     Busca de detalhes de livros
 
     Parametro:
-    -    id: int
+        id: int
 
     Exemplo chamada:
-    -    **/api/v1/books/1**
+        **/api/v1/books/1**
     """
     return service.get_book(book_id)
 
@@ -102,15 +101,15 @@ def get_category(
        service: BookService = Depends(get_book_services)
     ):
     """
-        Lista Categorias disponíveis
+    Lista Categorias disponíveis
         exemplo de chamada:
-        - /api/v1/categories
-        -response:
-            [
-                {
-                    "category": "string"
-                }
-            ]
+            /api/v1/categories
+    response:
+    [
+        {
+            "category": "string"
+        }
+    ]
     """
     return service.get_category()
 
@@ -118,54 +117,54 @@ def get_category(
 @router_stats.get("/overview", response_model= OverviewResponse)
 def get_stats_overview(service: BookService = Depends(get_book_services)):
     """
-        Obtem visão geral das estatisticas
-        exemplo de chamada:
-        - /api/v1/stats/overview
+    Obtem visão geral das estatisticas
+    Exemplo de chamada:
+        /api/v1/stats/overview
 
-        - response: 
-            {
-                "total_livros": 0,
-                "preco_medio": 0,
-                "distribuicao_ratings": {
-                    "additionalProp1": 0,
-                    "additionalProp2": 0,
-                    "additionalProp3": 0
-                }
+    response: 
+        {
+            "total_livros": 0,
+            "preco_medio": 0,
+            "distribuicao_ratings": {
+                "additionalProp1": 0,
+                "additionalProp2": 0,
+                "additionalProp3": 0
             }
+        }
     """
     return service.get_overview()
 
 @router_stats.get("/categories", response_model= StatCategoryResponse)
 def get_stats_category(service: BookService = Depends(get_book_services)):
     """
-        Obtem estatisticas por categoria
-        exemplo de chamada:
-        - /api/v1/stats/categories
+    Obtem estatisticas por categoria
+    Exemplo de chamada:
+        /api/v1/stats/categories
 
-        - response:
-            {
+    response:
+        {
+            "total": 0,
+            "category": {
+                "additionalProp1": {
                 "total": 0,
-                "category": {
-                    "additionalProp1": {
-                    "total": 0,
-                    "prices": [
-                        0
-                    ]
-                    },
-                    "additionalProp2": {
-                    "total": 0,
-                    "prices": [
-                        0
-                    ]
-                    },
-                    "additionalProp3": {
-                    "total": 0,
-                    "prices": [
-                        0
-                    ]
-                    }
+                "prices": [
+                    0
+                ]
+                },
+                "additionalProp2": {
+                "total": 0,
+                "prices": [
+                    0
+                ]
+                },
+                "additionalProp3": {
+                "total": 0,
+                "prices": [
+                    0
+                ]
                 }
-                }"""
+            }
+            }"""
     return service.get_stats_category()
 
 # ###Rota Scraping
@@ -173,13 +172,13 @@ def get_stats_category(service: BookService = Depends(get_book_services)):
 def get_data_scrape(
     service: BookService = Depends(get_book_services),
     current_user: str = Depends(jwt_service.get_current_user) 
-                    ):
+):
     """
-        Rota para iniciar o scraping de livros do site Books to Scrape
+    Rota para iniciar o scraping de livros do site Books to Scrape
 
-        Exemplo de chamada:
-        - /api/v1/scrape/bookscraping
+    Exemplo de chamada:
+        /api/v1/scrape/bookscraping
 
-        Requer autenticação com token JWT
+    Requer autenticação com token JWT
     """
     return service.scraping()

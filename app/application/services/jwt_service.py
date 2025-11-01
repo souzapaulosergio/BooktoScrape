@@ -18,7 +18,7 @@ class JWTService:
         to_encode = data.copy()
         expire = datetime.utcnow() + (expires_delta or timedelta(minutes=self.access_token_expire_minutes))
         to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)  # <-- corrigido
+        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
         return encoded_jwt
 
     # Função para decodificar JWT

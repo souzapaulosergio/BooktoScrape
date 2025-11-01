@@ -76,12 +76,12 @@ class BookService:
         soup = self.obter_pagina()
         categorias = soup.select("div.side_categories ul li ul li a")
         return [
-                    (
-                         categoria.get_text(strip=True), 
-                         self.url + categoria["href"]
-                    ) 
-                    for categoria in categorias
-                    ]
+                (
+                    categoria.get_text(strip=True), 
+                    self.url + categoria["href"]
+                ) 
+                for categoria in categorias
+            ]
      
     def obter_livros(self,nome_categoria, url_categoria):
         """

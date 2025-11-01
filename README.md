@@ -1,5 +1,5 @@
-# Techchallenge Fase I
-> API de gerenciamento de Livros fornece *endpoints* Restful para gerenciamento de livros, busca de livros por id, categoria, preço, maior avalição. 
+# TechChallenge Fase I
+> A API permite coletar (***via Web Scrape***) e consultar informações detalhadas sobre livros de diferentes tilulos a partir da plataforma  BooktoScrape, alem de fornecer estatisticas detalhadas com base nos dados coletados
 
 **URL: BASE**
 - #### PRODUÇÂO 
@@ -8,8 +8,13 @@
            URL SWAGGER:  https://booktoscrape-1.onrender.com/docs
 
     ````
+- ### Apresentação do Projeto
+```bash
+    Link Video: YouTube
+```
 
 **Pipeline**
+- Pipeline pensado para escalabilidade Futura
 ```mermaid
 ---
 config:
@@ -31,7 +36,7 @@ flowchart TB
   end
  subgraph subGraph2["Dados e ML"]
         G["fa:fa-hdd Data Lake / Data Warehouse"]
-        H["fa:fa-cogs Pipeline Treinamento e MLOps"]
+        H["fa:fa-cogs Pipeline Train e MLOps"]
         I["fa:fa-server Deploy"]
   end
     A -- Token --> B
@@ -75,7 +80,7 @@ sequenceDiagram
     participant D as Banco de Dados (DB)
     participant A as API Externa (Token)
     participant R as Rota Protegida de Scrape (Scrape API)
-    participant W as Site
+    participant W as Plataforma BooktoScrape
     participant C as Consumidores 
 
     %% 1. Inicialização do Servidor e DB
@@ -126,7 +131,6 @@ sequenceDiagram
     end
 ```
 
-
 # 📚 BooktoScrape API
 
 <!-- **URL Base** '/api/v1/login' -->
@@ -140,6 +144,7 @@ sequenceDiagram
 | **SQLite** | Banco de dados leve e local |
 
 ---
+### Execução do Projeto
 
 1. **Clone o repositório** 
     ```bash
@@ -201,9 +206,10 @@ Auth: Bearer <token>
 | `GET`  | `/api/v1/books/search?titulo=<nome>`      | Busca por título               |
 | `GET`  | `/api/v1/books/price-range?min=20&max=30` | Filtra por faixa de preço      |
 
-
-### Exemplo de chamada Lista todos os Livros
-   ```bash
+## API de Consulta Livros
+### Descrição
+- ### Exemplo de chamada Lista todos os Livros
+    ```bash
     curl -X GET "http://127.0.0.1:8000/api/v1/books"
 
     Respose 200:
@@ -220,7 +226,7 @@ Auth: Bearer <token>
         }
     ]
 
-```
+    ```
 ### Exemplo de chamada Lista Top Rated 
  ```bash
     curl -X GET "http://127.0.0.1:8000/api/v1/books/top_rated"
@@ -241,44 +247,22 @@ Auth: Bearer <token>
 
 ```
 
-### Exemplo de chamada Pesquisa por Titulo e/ou Categoria 
-```bash
-    curl -X GET "http://127.0.0.1:8000/api/v1/books/search?categoria=Mystery" -H "accept: application/json"
+## Pequisa por Titulo e/ou Categoria
+### Descrição
+- Retorna os dados coletados pela a API, permitindo filtros opcionais
 
-    Respose 200:
-      [
-        {
-            "categoria": "string",
-            "titulo": "string",
-            "moeda": "string",
-            "preco": 0,
-            "rating": 0,
-            "estoque": "string",
-            "created_at": "2025-10-31T19:56:57.523Z",
-            "id": 0
-        }
-        ]
-    422 Validation Error
-    {
-        "detail": [
-            {
-            "loc": [
-                "string",
-                0
-            ],
-            "msg": "string",
-            "type": "string"
-            }
-        ]
-        }
+- ### Parâmetros
+    | Nome              | Tipo      | Obrigatório   | Descrição
+    | ----------------- | --------- | --------------|-----------------------|
+    |Titulo             | string    | true          |Pesquisa por Titulos   |
+    |Categoria          | string    | true          |Pesquisa por Categoria |
 
-```
+-   ### Exemplo de chamada
 
-### Exemplo de chamda Pesquisa por Preço
-```bash
-   curl -X GET "http://127.0.0.1:8000/api/v1/books/price-range?min=20&max=30" -H "accept: application/json"
+    ```bash
+        curl -X GET "http://127.0.0.1:8000/api/v1/books/search?categoria=Mystery" -H "accept: application/json"
 
-    Respose:
+        Respose 200:
         [
             {
                 "categoria": "string",
@@ -287,135 +271,189 @@ Auth: Bearer <token>
                 "preco": 0,
                 "rating": 0,
                 "estoque": "string",
-                "created_at": "2025-10-31T20:03:57.349Z",
+                "created_at": "2025-10-31T19:56:57.523Z",
                 "id": 0
             }
-    ]
-    Validation error
-    {
-        "detail": [
-            {
-            "loc": [
-                "string",
-                0
-            ],
-            "msg": "string",
-            "type": "string"
+            ]
+        422 Validation Error
+        {
+            "detail": [
+                {
+                "loc": [
+                    "string",
+                    0
+                ],
+                "msg": "string",
+                "type": "string"
+                }
+            ]
             }
-        ]
-        }
-```
-### Exemplo de chamda Pesquisa por id
-```bash
-   curl -X GET "http://127.0.0.1:8000/api/v1/books/1" -H "accept: application/json"
 
-    Respose:
-    {
-        "categoria": "string",
-        "titulo": "string",
-        "moeda": "string",
-        "preco": 0,
-        "rating": 0,
-        "estoque": "string",
-        "created_at": "2025-10-31T20:09:41.683Z",
-        "id": 0
-    }
-    Validation error
-    {
-        "detail": [
-            {
-            "loc": [
-                "string",
-                0
-            ],
-            "msg": "string",
-            "type": "string"
+    ```
+
+## API Pesquisa por Preço mínimo e maximo
+### Descrição
+- Retorna os dados coletados pela a API, permitindo filtros obrigatório por preço minimo e máximo
+
+- Parâmetros
+    |Nome       | Tipo  | Obrigatorio |Descrição                        | 
+    |-----------|------ | ------------|---------------------------------|
+    | min       | float |   true      | Permite filtar por valor Minimo |
+    | max       | float |   true      | Premite filtar por valor maximo |
+
+- ### Exemplo de chamada
+    ```bash
+    curl -X GET "http://127.0.0.1:8000/api/v1/books/price-range?min=20&max=30" -H "accept: application/json"
+
+        Respose:
+            [
+                {
+                    "categoria": "string",
+                    "titulo": "string",
+                    "moeda": "string",
+                    "preco": 0,
+                    "rating": 0,
+                    "estoque": "string",
+                    "created_at": "2025-10-31T20:03:57.349Z",
+                    "id": 0
+                }
+        ]
+        Validation error
+        {
+            "detail": [
+                {
+                "loc": [
+                    "string",
+                    0
+                ],
+                "msg": "string",
+                "type": "string"
+                }
+            ]
             }
-        ]
-        }
-```
+    ```
+## API pesquisa livros por id
+- ### Detalhes
+    Retorna os dados coletados pela a API, permitindo filtros obrigatório por id
+    
+- ### Parâmetros
+    | Nome  | Tipo      | Obrigatório   | Descrição
+    | ------| --------- | --------------|------------------------|
+    |id     | int       | true          |permite pesquisar por id|
 
-## Categorias
+- ## Exemplo de chamada
+    ```bash
+    curl -X GET "http://127.0.0.1:8000/api/v1/books/1" -H "accept: application/json"
+
+        Respose:
+        {
+            "categoria": "string",
+            "titulo": "string",
+            "moeda": "string",
+            "preco": 0,
+            "rating": 0,
+            "estoque": "string",
+            "created_at": "2025-10-31T20:09:41.683Z",
+            "id": 0
+        }
+        Validation error
+        {
+            "detail": [
+                {
+                "loc": [
+                    "string",
+                    0
+                ],
+                "msg": "string",
+                "type": "string"
+                }
+            ]
+            }
+    ```
+## API Categorias
+- ### Detalhe
+    -   Retorna todas as Categorias coletados pela a API
+
+### Tabela
 | Método | Endpoint                                  | Descrição                      |
+|--------|-------------------------------------------|--------------------------------|
 | `GET`  | `/api/v1/categories`                      | Lista todas as categorias      |
 
-### Exemplo de chamda Lista Todas as Categorias
-```bash
-   curl -X GET "http://127.0.0.1:8000/api/v1/categories" -H "accept: application/json"
+-   ### Exemplo de chamda
+    ```bash
+    curl -X GET "http://127.0.0.1:8000/api/v1/categories" -H "accept: application/json"
 
-    Respose:
-    [
-        {
-            "category": "string"
-        }
-    ] 
-```
+        Respose:
+        [
+            {
+                "category": "string"
+            }
+        ] 
+    ```
 
 ## 📊 Estatísticas
+- ### Tabela
+    | Endpoint                       | Descrição                                                         |
+    | ------------------------------ | ----------------------------------------------------------------- |
+    | `GET /api/v1/stats/overview`   | Estatísticas gerais (total, preço médio, distribuição de ratings) |
+    | `GET /api/v1/stats/categories` | Estatísticas por categoria                                        |
 
-| Endpoint                       | Descrição                                                         |
-| ------------------------------ | ----------------------------------------------------------------- |
-| `GET /api/v1/stats/overview`   | Estatísticas gerais (total, preço médio, distribuição de ratings) |
-| `GET /api/v1/stats/categories` | Estatísticas por categoria                                        |
-
-&#x1FA7A; Health Check
+## &#x1FA7A; Health Check
 
 ### GET /api/health
-Response:
-```json
-{
-  "status": "healthy"
-}
-```
+- Response:
+    ```json
+    {
+    "status": "healthy"
+    }
+    ```
+# Estrutura de pastas
 
-
-**Estutura de pastas**
-
-```mermaid
----
-config:
-  theme: neutral
-  layout: top-down
----
-graph TD
-    A["📁 BooktoScrape/"]:::folder
-    A --> B["📁app/"]:::folder
-    B --> B1["📁api/"]:::folder
-    B1 --> B1A["📁middleware/"]:::folder
-    B1A --> B1A1["logging_middleware.py"]:::file
-    B1 --> B1B["📁route/"]:::folder
-    B1B --> B1B1["auth_route.py"]:::file
-    B1B --> B1B2["book_routes.py"]:::file
-    B --> B2["📁aplication/"]:::folder
-    B2 --> B2A["📁service/"]:::folder
-    B2A --> B2A0["📁imagens/"]:::folder
-    B2A --> B2A1["book_service.py"]:::file
-    B2A --> B2A2["jwt_service.py"]:::file
-    B --> B3["📁core/"]:::folder
-    B3 --> B30[("Sql.db")]:::db
-    B3 --> B3A["config.py"]:::file
-    B3 --> B3B["database.py"]:::file
-    B3 --> B3C["logging_config.py"]:::file
-    B --> B4["📁domain/"]:::folder
-    B4 --> B4A["📁entities/"]:::folder
-    B4A --> B4A1["books.py"]:::file
-    B4 --> B4B["📁schemas/"]:::folder
-    B4B --> B4B1["auth.py"]:::file
-    B4B --> B4B2["book.py"]:::file
-    B --> B5["📁infrastructure/"]:::folder
-    B5 --> B5A["repositories/"]:::file
-    B5A --> B5A1["book_repository.py"]
-    A --> C["📁 venv/"]:::folder
-    A --> D["main.py"]:::file
-    A --> E["README.md"]:::file
-    A --> F["requirements.txt"]:::file
-    A --> G["run.py"]:::file
-    A --> H["vercel.json"]:::file
-
-%% Estilos
-classDef folder fill:#E6F3FF,stroke:#007BFF,stroke-width:1px;
-classDef file fill:#FFF8E6,stroke:#E3B341,stroke-width:1px;
-classDef db fill:#D5F5E3,stroke:#27AE60,stroke-width:1px;
+```bash
+booktowebscrape-api
+├── 📁 app
+│   ├── api/
+│   |   ├── middleware/
+|   |   |   ├── __init__.py
+|   |   |   └── logging_middleware.py
+|   |   ├── routes/
+|   |   |   ├── __init__.py
+|   |   |   ├── auth_route.py
+|   |   |   └── book_routes.py
+|   |   └── __init__.py
+│   ├──📁 application
+|   |   ├── services/
+|   |   |   ├── imagens/
+|   |   |   ├── __init__.py
+|   |   |   ├── book_service.py
+|   |   |   └── jwt_service.py
+|   |   └── __init__.py
+│   ├──📁 core
+|   |   ├── __init__.py
+|   |   ├── book.db  
+|   |   ├── config.py
+|   |   ├── database.py
+|   |   └── logging_config.py
+│   ├──📁 domain
+|   |   ├── entities/
+|   |   |   ├── __init__.py
+|   |   |   └── books.py
+|   |   ├── schemas/
+|   |   |   ├── __init__.py
+|   |   |   ├── auth.py
+|   |   |   └── book.py
+|   |   └── __init__.py
+│   ├──📁 infrastructure
+|   |   ├── __init__.py
+|   |   └── book_repository.py
+|   └── __init__.py
+├── 📁 venv
+├──⚙️ .env
+├──🛑 .gitignore
+├── main.py
+├── README.md
+├── requeirements.txt
+├── run.py
 ```
 
 ### Ferramentas de Desenvolvimento

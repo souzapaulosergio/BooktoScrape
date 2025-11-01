@@ -14,6 +14,7 @@ app = FastAPI(
     description="API de gerenciamento de Livros fornece endpoints Restful para gerenciamento de livros, busca de livros por id, categoria, preço, maior avalição."
 )
 
+
 @app.on_event("startup")
 def startup_event():
     init_db() 
