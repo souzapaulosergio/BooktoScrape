@@ -3,6 +3,7 @@ from typing import List, Optional
 from sqlalchemy import func
 from app.domain.entities.books import Book, Users
 from app.domain.schemas.book import BookCreate
+from sqlalchemy import and_
 
 class BookRepository:
     def __init__(self, db: Session):
@@ -59,6 +60,7 @@ class BookRepository:
             "distribuicao_ratings": distribuicao_ratings
         }
     
+    
     def get_stats_category(self) -> dict:
         total = self.db.query(func.count(Book.id)).scalar()
         
@@ -95,5 +97,37 @@ class BookRepository:
                 "estoque": b.estoque,
                 "rating": b.rating
             } for b in book
-        ]
- 
+        ]   
+
+
+    def upsert_book(self, book: BookCreate):
+        # Procura um livro com o mesmo título e categoria
+        existing_book = (
+            self.db.query(Book)
+            .filter(
+                and_(
+                    Book.titulo == book.titulo,
+                    Book.categoria == book.categoria,
+                    Book.preco == book.preco
+                )
+            )
+            .first()
+        )
+
+        if existing_book:
+            # Atualiza os campos existentes com os novos valores
+            for key, value in book.model_dump().items():
+                print(key, value)
+                setattr(existing_book, key, value)
+            self.db.commit()
+            self.db.refresh(existing_book)            
+            return existing_book
+        else:
+            # Cria novo registro se não existir
+            new_book = Book(**book.model_dump())
+            self.db.add(new_book)
+            self.db.commit()
+            self.db.refresh(new_book)
+            return new_book
+
+    

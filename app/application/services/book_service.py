@@ -152,7 +152,7 @@ class BookService:
                     rating=rating,
                     estoque=stock
                     )
-                self.repository.create(book)
+                self.repository.upsert_book(book)
                     
             next_page = soup.select_one("li.next a")
             if next_page:
