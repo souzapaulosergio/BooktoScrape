@@ -1,5 +1,13 @@
-# techchallenge Fase I
-API de gerenciamento de Livros fornece *endpoints* Restful para gerenciamento de livros, busca de livros por id, categoria, preço, maior avalição. 
+# Techchallenge Fase I
+> API de gerenciamento de Livros fornece *endpoints* Restful para gerenciamento de livros, busca de livros por id, categoria, preço, maior avalição. 
+
+**URL: BASE**
+- #### PRODUÇÂO 
+    ```bash
+           API PRODUÇÃO:  https://booktoscrape-1.onrender.com
+           URL SWAGGER:  https://booktoscrape-1.onrender.com/docs
+
+    ````
 
 **Pipeline**
 ```mermaid
@@ -192,7 +200,7 @@ Auth: Bearer <token>
 | `GET`  | `/api/v1/books/top-rated`                 | Lista livros com melhor rating |
 | `GET`  | `/api/v1/books/search?titulo=<nome>`      | Busca por título               |
 | `GET`  | `/api/v1/books/price-range?min=20&max=30` | Filtra por faixa de preço      |
-| `GET`  | `/api/v1/categories`                      | Lista todas as categorias      |
+
 
 ### Exemplo de chamada Lista todos os Livros
    ```bash
@@ -326,6 +334,11 @@ Auth: Bearer <token>
         ]
         }
 ```
+
+## Categorias
+| Método | Endpoint                                  | Descrição                      |
+| `GET`  | `/api/v1/categories`                      | Lista todas as categorias      |
+
 ### Exemplo de chamda Lista Todas as Categorias
 ```bash
    curl -X GET "http://127.0.0.1:8000/api/v1/categories" -H "accept: application/json"

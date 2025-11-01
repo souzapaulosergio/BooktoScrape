@@ -11,9 +11,8 @@ setup_logging()
 app = FastAPI(
     title="Books API",
     version="1.0.0",
-    description="API para gerenciamento de livros, incluindo listagem, busca e ranking."
+    description="API de gerenciamento de Livros fornece endpoints Restful para gerenciamento de livros, busca de livros por id, categoria, preço, maior avalição."
 )
-
 
 @app.on_event("startup")
 def startup_event():

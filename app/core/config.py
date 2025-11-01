@@ -3,6 +3,9 @@ from typing import Optional
 from pathlib import Path
 import os
 from pydantic import Field
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Settings(BaseSettings):
     # diretório base: pasta core dentro do projeto
@@ -12,8 +15,8 @@ class Settings(BaseSettings):
     database_url: str = Field(default_factory=lambda: f"sqlite:///{(Path(__file__).resolve().parent.parent / 'core' / 'books.db')}")   
     log_level: str = "INFO"
 
-    jwt_secret_key: str = "mysecretkey123"  # coloque um segredo seguro
-    jwt_algorithm: str = "HS256"
+    jwt_secret_key: str = os.getenv("JWT_SECRET_KEY")
+    jwt_algorithm: str =  os.getenv("JWT_ALGORITHM")
     jwt_access_token_expire_minutes: int = 60
 
     class Config:
