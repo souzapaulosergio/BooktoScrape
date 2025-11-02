@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.responses import JSONResponse
-from app.core.database import init_db
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+from app.core.database import init_db, get_db
 from app.core.logging_config import setup_logging
 from app.api.routes import book_routes
 from app.api.routes.auth_route import  router as auth_router
@@ -13,7 +15,6 @@ app = FastAPI(
     version="1.0.0",
     description="API de gerenciamento de Livros fornece endpoints Restful para gerenciamento de livros, busca de livros por id, categoria, preço, maior avalição."
 )
-
 
 @app.on_event("startup")
 def startup_event():
@@ -42,9 +43,21 @@ async def root():
     )
 
 @app.get("/health")
-async def health():
+async def health(db: Session = Depends(get_db)):
+    """
+    Endpoint de verificação de saúde da API e do Banco de Dados
+    """
+    try:
+        db.execute(text("SELECT 1"))
+        db_status = "ok"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+
+    status = "healthy" if db_status == "ok" else "unhealthy"
+
     return JSONResponse(
-        content = {
-            "status": "healthy"
+        content={
+            "status": status,
+            "database": db_status
         }
     )

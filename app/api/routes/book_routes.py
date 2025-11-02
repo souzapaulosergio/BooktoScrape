@@ -25,10 +25,10 @@ def get_all_books(
        service: BookService = Depends(get_book_services)
 ):
     """
-        Obtem lita de Livros
+    Obtem lista de Livros
 
-        Exemplo de chamada:
-            /api/v1/books
+    Exemplo de chamada:
+        /api/v1/books
     """
     return service.get_all_book()
 
