@@ -208,6 +208,13 @@ sequenceDiagram
 
     obs. A base de dados será criada automaticamente na primeira execução
 
+6. **Criar arquivo .env
+    ```bash
+    criar arquivo .env da rais do projeto e incluir as credenciais, arquivo é necessário para a execução do projeto
+        JWT_SECRET_KEY=
+        WT_ALGORITHM=
+    ```
+
 ## 🌐 EndPoints
 
 🔑 Autenticação
