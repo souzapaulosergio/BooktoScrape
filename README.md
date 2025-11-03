@@ -12,7 +12,44 @@
 ```bash
     Link Video: https://www.youtube.com/watch?v=_H1cS0zUcjI
 ```
+### Pipeline do Projeto
+```mermaid
+---
+config:
+  theme: neutral
+  layout: dagre
+---
+flowchart TB
+ subgraph subGraph0["Pipeline de Inges. e Escrita"]
+        A("fa:fa-key API Autenticação")
+        B("fa:fa-code Scrape")
+        C["fa:fa-globe BooktoScrape"]
+        D[("fa:fa-database SQL")]
+        E["fa:fa-Rotas GET"]
+        F["fa:fa-user Consumidor"]
+        
+  end
+    A -- Token --> B
+    B -- Scrape --> C
+    B-- Dados --> D
+    E -- "Consulta Dados" --> D
+    E -- "Http Request" --> F
 
+    A:::write_service
+    B:::write_service
+    C:::external
+    D:::data_storage
+    
+   
+    classDef external fill:#F9E79F,stroke:#DAA520
+    classDef write_service fill:#AFEEEE,stroke:#40E0D0
+    classDef data_storage fill:#DDA0DD,stroke:#9932CC
+    classDef processing fill:#F08080,stroke:#B22222
+    classDef ml_service fill:#98FB98,stroke:#3CB371
+    classDef consumer fill:#DCDCDC,stroke:#808080
+    style subGraph0 color:#000000
+
+```
 
 **Pipeline**
 - Pipeline pensado para escala
