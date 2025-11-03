@@ -4,17 +4,19 @@
 **URL: BASE**
 - #### PRODUÇÂO 
     ```bash
-           API PRODUÇÃO:  https://booktoscrape-1.onrender.com
+           Link Deploy:  https://booktoscrape-1.onrender.com
            URL SWAGGER:  https://booktoscrape-1.onrender.com/docs
 
     ````
 - ### Apresentação do Projeto
 ```bash
-    Link Video: YouTube
+    Link Video: https://www.youtube.com/watch?v=_H1cS0zUcjI
 ```
 
+
 **Pipeline**
-- Pipeline pensado para escalabilidade Futura
+- Pipeline pensado para escala
+bilidade Futura
 ```mermaid
 ---
 config:
@@ -148,7 +150,7 @@ sequenceDiagram
 
 1. **Clone o repositório** 
     ```bash
-    git@github.com:souzapaulosergio/BooktoScrape.git
+    git clone git@github.com:souzapaulosergio/BooktoScrape.git
     cd BooktoScrape
 2. **Crie a ambiente virtual
     ````bash
